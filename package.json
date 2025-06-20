@@ -1,0 +1,27 @@
+{
+  "name": "bancorp",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "bun --watch ./src/index.ts",
+    "migrate": "bunx drizzle-kit push"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/pg": "^8.15.4",
+    "drizzle-kit": "^0.31.1",
+    "tsx": "^4.20.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@sapphire/framework": "^5.3.6",
+    "@supabase/supabase-js": "^2.49.4",
+    "discord.js": "14.x",
+    "dotenv": "^16.5.0",
+    "drizzle-orm": "^0.44.2",
+    "pg": "^8.16.1"
+  }
+}
