@@ -1,9 +1,6 @@
 import { Precondition, type ChatInputCommand } from '@sapphire/framework';
 import type { ChatInputCommandInteraction } from 'discord.js';
-import { drizzle } from 'drizzle-orm/postgres-js';
-import * as schema from '../src/db/schema';
-const db = drizzle({ schema });
-
+import { db } from '../utils/drizzle';
 
 export class KYCNotVerified extends Precondition {
     public override async chatInputRun(interaction: ChatInputCommandInteraction, command: ChatInputCommand, context: Precondition.Context): Precondition.AsyncResult {

@@ -1,13 +1,14 @@
 import { Command } from '@sapphire/framework';
 import { ModalBuilder, TextInputStyle, TextInputBuilder, ActionRowBuilder, ModalSubmitInteraction, type CacheType, EmbedBuilder, Colors } from 'discord.js';
-import { drizzle } from 'drizzle-orm/postgres-js';
-import * as schema from '../db/schema';
-const db = drizzle({ schema });
+import { db } from '../utils/drizzle';
+import { clientsTable } from '../db/schema';
+import { successEmbed } from '../utils/embeds';
 
 export class SlashCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
     super(context, {
       ...options,
+      preconditions: ["KYCNotVerified"],
       description: 'Register to the banking system thru Know-your-customer.'
     });
   }
@@ -51,34 +52,24 @@ export class SlashCommand extends Command {
 
   private async submitModal(interaction: ModalSubmitInteraction<CacheType>) {
     const ign = interaction.fields.getTextInputValue('ign')
-    const doesUserExist = db.query.clientsTable.findFirst({
-      where(fields, operators) {
-        return operators.eq(fields.discordId, interaction.user.id)
-      },
+    await this.registerUser(interaction.user.id, ign)
+    const embed = successEmbed({
+      author: { name: "Account Creation" },
+      title: "Welcome to TRUSS Bank",
+      description: "Congratulations! You have been registered to our system. To get started, do `/account create` to create your very first account."
     })
-
-    console.log(doesUserExist)
-    return interaction.reply(ign)
-    // if (error) {
-    //   const embed = new EmbedBuilder({
-    //     title: "An error occured",
-    //     description: "An unexpected error occured while performing this task.",
-    //     color: Colors.Red,
-    //     fields: [
-    //       { name: "Error Message", value: `\`\`\`${error.message}\`\`\`` }
-    //     ]
-    //   })
-    //   return interaction.reply({ embeds: [embed], flags: ["Ephemeral"] })
-    // }
-    // const success = new EmbedBuilder({
-    //   title: "Welcome to TRUSS Bank!",
-    //   description: "Thank you for registering! You can now create an account using `/account create`! ",
-    //   footer: {
-    //     text: "The bank you can trust.",
-    //     iconURL: "https://files.catbox.moe/1los0i.png"
-    //   }
-    // })
-    // interaction.reply({ embeds: [success], flags: ['Ephemeral'] })
+    return interaction.reply({
+      embeds: [embed],
+      flags: ["Ephemeral"]
+    })
   }
 
+  private async registerUser(userId: string, ign: string) {
+    return await db.insert(clientsTable).values({
+      discordId: userId,
+      minecraftIGN: ign
+    }).returning({
+      insertedId: clientsTable.id
+    })
+  }
 }

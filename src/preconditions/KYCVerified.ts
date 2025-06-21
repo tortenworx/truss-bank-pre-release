@@ -1,8 +1,6 @@
 import { Precondition, type ChatInputCommand } from '@sapphire/framework';
 import type { ChatInputCommandInteraction } from 'discord.js';
-import { drizzle } from 'drizzle-orm/postgres-js';
-import * as schema from '../src/db/schema';
-const db = drizzle({ schema });
+import { db } from '../utils/drizzle';
 
 
 export class KYCVerified extends Precondition {
@@ -16,6 +14,6 @@ export class KYCVerified extends Precondition {
                 return operators.eq(fields.discordId, userId)
             },
         })
-        return data ? this.ok() : this.error({ message: "You dont have not registed your account, do `/kyc` to get started!" })
+        return data ? this.ok() : this.error({ identifier: "No account registered", message: "You have not registed your account with TRUSS Bank, do `/kyc` to get started!" })
     }
 }

@@ -6,7 +6,8 @@ const client = new SapphireClient({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages
-    ]
+    ],
+    enableLoaderTraceLoggings: true
 });
 
 client.login(process.env.TOKEN);
