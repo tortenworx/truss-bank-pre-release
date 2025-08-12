@@ -53,6 +53,7 @@ export class QuikDep extends Command {
             if (!message.interactionMetadata) return interaction.editReply({ components: [invalid], flags: ["IsComponentsV2"] });
             if (quickdep_search) return interaction.editReply({ components: [invalid], flags: ["IsComponentsV2"] })
             if (message.interactionMetadata.user.id !== interaction.user.id) return await interaction.editReply({ components: [invalid], flags: ["IsComponentsV2"] });
+            if (message.createdTimestamp)
             if (message.author.id !== process.env.SERVER_BOT_ID) return await interaction.editReply({ components: [invalid], flags: ["IsComponentsV2"] });
             if (!message.embeds[0]) return await interaction.editReply({ components: [invalid], flags: ["IsComponentsV2"] });
             if (!message.embeds[0].footer) return await interaction.editReply({ components: [invalid], flags: ["IsComponentsV2"] });
@@ -60,7 +61,7 @@ export class QuikDep extends Command {
             if (!message.embeds[0].description) return await interaction.editReply({ components: [invalid], flags: ["IsComponentsV2"] });
             if (message.embeds[0].footer.text !== "Powered by PostmanPat") return await interaction.editReply({ components: [invalid], flags: ["IsComponentsV2"] });
             if (message.embeds[0].color !== 65280) return await interaction.editReply({ components: [invalid], flags: ["IsComponentsV2"] });
-
+            if (Math.floor(Date.now()/1000) - Math.floor(message.createdAt.getDate()/1000) < 10800) return await interaction.editReply({ components: [invalid.addTextDisplayComponents(new TextDisplayBuilder().setContent("PostmanPat transactions that are three hours old are not accepted. Please do /deposit instead."))], flags: ["IsComponentsV2"] });
             const embedTitle = message.embeds[0].title
             const embedDescription = message.embeds[0].description
             const splicedTitle = embedTitle?.split(" ")
