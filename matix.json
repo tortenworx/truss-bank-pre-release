@@ -1,0 +1,15 @@
+{
+    "fees": {
+        "withrawal_fee": 5,
+        "underbalance_fee": 35,
+        "transfer_fee": {
+            "interbank": 10,
+            "self": 0,
+            "others": 25
+        }
+    },
+    "credit": {
+        "interest_rate": 0.0625,
+        "interest_calculation": "simple"
+    }
+}
