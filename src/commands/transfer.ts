@@ -198,7 +198,7 @@ export class AccountsCommand extends Subcommand {
             return operators.eq(fields.id, get_to_account?.primaryOwner)
         },
     })
-    if (!get_to_client || get_from_account.primaryOwner !== get_to_client.id) return interaction.reply({ components: [err_container], flags: ["Ephemeral", "IsComponentsV2"] });
+    if (!get_to_client || get_to_account.primaryOwner !== get_to_client.id) return interaction.reply({ components: [err_container], flags: ["Ephemeral", "IsComponentsV2"] });
 
     const get_to_user = await interaction.client.users.fetch(get_to_client?.discordId)
 
