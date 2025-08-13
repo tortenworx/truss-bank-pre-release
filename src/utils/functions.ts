@@ -55,7 +55,7 @@ export async function tx_init(type: "CREDIT" | "DEBIT", description: string, amo
                                     },
                                     {
                                         type: ComponentType.TextDisplay,
-                                        content: `**Transaction Type**: ${tx_info.type}\n**Account**: ${tx_info.account?format_account_numbers(tx_info.account):"N/A"}\n**Amount**: ${format_amounts(tx_info.amount)}\n**Transaction Date**: <t:${Math.floor(tx_info.date_created?.getTime()/1000)}>`
+                                        content: `**Transaction Type**: ${tx_info.type}\n**Account**: ${tx_info.account?format_account_numbers(tx_info.account):"N/A"}\n**Transaction Description**: ${tx_info.description}\n**Amount**: ${format_amounts(tx_info.amount)}\n**Transaction Date**: <t:${Math.floor(tx_info.date_created?.getTime()/1000)}>`
                                     },
                                     {
                                         type: ComponentType.Separator,
@@ -90,9 +90,7 @@ export async function tx_init(type: "CREDIT" | "DEBIT", description: string, amo
                     throw new Error("An error occured while recording the transaction!")
                 }
                 if (user) {
-                    user.send({
-                        components: [
-                            new ContainerBuilder({
+                    const component = new ContainerBuilder({
                                 accent_color: Colors.Gold,
                                 components: [
                                     {
@@ -110,7 +108,7 @@ export async function tx_init(type: "CREDIT" | "DEBIT", description: string, amo
                                     },
                                     {
                                         type: ComponentType.TextDisplay,
-                                        content: `**Transaction Type**: ${tx_info.type}\n**Account**: ${tx_info.account?format_account_numbers(tx_info.account):"N/A"}\n**Amount**: ${format_amounts(tx_info.amount)}\n**Transaction Date**: <t:${Math.floor(tx_info.date_created?.getTime()/1000)}>`
+                                        content: `**Transaction Type**: ${tx_info.type}\n**Account**: ${tx_info.account?format_account_numbers(tx_info.account):"N/A"}\n**Transaction Description**: ${tx_info.description}\n**Amount**: ${format_amounts(tx_info.amount)}\n**Transaction Date**: <t:${Math.floor(tx_info.date_created?.getTime()/1000)}>`
                                     },
                                     {
                                         type: ComponentType.Separator,
@@ -124,7 +122,8 @@ export async function tx_init(type: "CREDIT" | "DEBIT", description: string, amo
                                 ],
                                 type: ComponentType.Container
                             })
-                        ],
+                    user.send({
+                        components: [component],
                         flags: ["IsComponentsV2"]
                     })
                 }
